@@ -1,0 +1,4 @@
+Exemplo 1: Palavra reconhecida
+Exemplo 2: Palavra não reconhecida (parou em um estado não final)
+Exemplo 3: Palavra não reconhecida (loop detectado)
+Exemplo 4: Palavra reconhecida
