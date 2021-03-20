@@ -9,22 +9,23 @@ LIMITE_NUMERO_ITERACOES = 1000
 
 # Inicializa a fita 2 e 3 com base na fita 1
 def inicializa_fitas(fita1):
-    # Identifica onde começa a palavra a ser processada na fita 1
+    # Identifica onde começa a representação da palavra a ser processada na fita 1
     pos_palavra = fita1.index('000') + len('000')
-    # Salva na fita 2 o símbolo de ínicio de fita seguido da palavra a ser processada
+    # Salva na fita 2 a representação do símbolo de ínicio de fita
+    # seguido da representação palavra a ser processada
     fita2 = REPRESENTACAO_INICIO_FITA+'0'+fita1[pos_palavra:]
     # Salva na fita 3 o estado inicial da máquina M
     fita3 = ESTADO_INICIAL
     return fita2, fita3
 
-# Obtém o símbolo da máquina M que está sob o cabeçote da fita passada
+# Obtém a representação do símbolo da máquina M que está sob o cabeçote da fita passada
 def obtem_simbolo_sob_cabecote(pos_cabecote, fita):
-    # Busca um 0, que separa o símbolo sob o cabeçote do seguinte a ele
+    # Busca um 0, que separa as representações de dois símbolos na fita
     pos_zero = fita.find('0', pos_cabecote)
-    # Caso a posição seja -1, esse símbolo é o último símbolo salvo na fita
+    # Caso a posição seja -1, essa representação é a última salva na fita
     if pos_zero == -1: 
         return fita[pos_cabecote:]
-    # Caso contrário retorna o símbolo sob o cabeçote
+    # Caso contrário retorna a representação do símbolo sob o cabeçote
     return fita[pos_cabecote:pos_zero]
     
 # Simula a máquina de turing universal
@@ -53,22 +54,22 @@ def simula_maquina_turing_universal(fita1):
     while contador < LIMITE_NUMERO_ITERACOES:
         # Obtém o próxima representação de um símbolo da máquina M a ser consumido da fita 2
         simbolo = obtem_simbolo_sob_cabecote(cabecote_fita2, fita2)
-        # Obtém o estado atual da máquina M
+        # Obtém a representação do estado atual da máquina M
         estado = obtem_simbolo_sob_cabecote(0, fita3)
         # Busca a transição que começa em 'estado' e consome 'simbolo'
         # Limita a busca pelo espaço da fita 1 que contêm as transições
         indice = fita1.find('00'+estado+'0'+simbolo+'0', pos_fim_estados_finais, pos_fim_transicoes)
         # Se encontrar tal transição
         if indice != -1:
-            # Inicializa ponteiro para a próxima representação da transição
+            # Inicializa ponteiro para a próxima representação de um elemento da transição
             pos_proximo_simbolo = indice+len('00')+len(estado)+len('0')+len(simbolo)+len('0')
             # Lê o estado de entrada da transição
             novo_estado = obtem_simbolo_sob_cabecote(pos_proximo_simbolo, fita1)
-            # Move o ponteiro do próximo símbolo
+            # Move o ponteiro para a próxima representação de um elemento da transição
             pos_proximo_simbolo+=len(novo_estado)+len('0')
             # Lê a representação do símbolo que deve substituir 'simbolo' na fita 2
             novo_simbolo = obtem_simbolo_sob_cabecote(pos_proximo_simbolo, fita1)
-            # Move o ponteiro do próximo símbolo
+            # Move o ponteiro para a próxima representação de um elemento da transição
             pos_proximo_simbolo+=len(novo_simbolo)+len('0')
             # Lê a direção que o cabeçote da fita 2 deverá se mover
             direcao = obtem_simbolo_sob_cabecote(pos_proximo_simbolo, fita1)
@@ -78,7 +79,8 @@ def simula_maquina_turing_universal(fita1):
             fita2 = fita2.replace(simbolo, novo_simbolo)
             # Se o cabeçote da fita 2 deve se mover para direita
             if direcao == REPRESENTACAO_DIRECAO_DIREITA:
-               # Verifica se o símbolo sobre o cabeçote é a última representação de um símbolo diferente de vazio
+               # Verifica se o símbolo sobre o cabeçote é a última
+               # representação de um símbolo diferente de vazio na fita 2
                indProx = fita2.find('0', cabecote_fita2)
                if indProx == -1:
                    # Se for, adiciona a representação de vazio na fita
@@ -93,7 +95,7 @@ def simula_maquina_turing_universal(fita1):
                cabecote_fita2 = fita2.find('0', cabecote_fita2)+1
             elif direcao == REPRESENTACAO_DIRECAO_ESQUERDA: # Se o cabeçote deve se mover para a esquerda
                # Move o cabecote para a representação anterior à atual
-               # Considera que não se tem transições à esquerda reconhecendo o ínicio da palavra
+               # Considera que não se tem transições que movem o cabeçote para a esquerda consumindo o ínicio da palavra
                # Ou seja, considera que a máquina não possui um erro que a permite acessar posições negativas da fita
                cabecote_fita2 = fita2.rfind('0', 0, cabecote_fita2-2)+1
         else:
