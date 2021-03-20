@@ -118,7 +118,7 @@ def simula_maquina_turing_universal(fita1):
 
 # Lê o conteúdo da fita 1
 # Foi considerado que o alfabeto da fita da máquina de turing universal é {0, 1}
-fita1 = input()
+fita1 = input('Digite a representação R<M, w>:\n')
 # Simula a máquina de turing universal para a representação contida na fita 1
 resultado = simula_maquina_turing_universal(fita1)
 # Imprime o resultado
