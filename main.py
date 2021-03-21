@@ -116,9 +116,13 @@ def simula_maquina_turing_universal(fita1):
     else:
         return 'Palavra não reconhecida (parou em um estado não final)'
 
+# Abre o arquivo de entrada
+arquivo = open("entrada.txt", "r")
 # Lê o conteúdo da fita 1
 # Foi considerado que o alfabeto da fita da máquina de turing universal é {0, 1}
-fita1 = input('Digite a representação R<M, w>:\n')
+fita1 = arquivo.readline()
+# Fecha o arquivo de entrada
+arquivo.close()
 # Simula a máquina de turing universal para a representação contida na fita 1
 resultado = simula_maquina_turing_universal(fita1)
 # Imprime o resultado
