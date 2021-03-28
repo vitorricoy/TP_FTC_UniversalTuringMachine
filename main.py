@@ -1,3 +1,8 @@
+'''
+Simulador de uma Máquina de Turing Universal
+Lê a entrada de um arquivo 'entrada.txt' e imprime a saída em arquivo 'saida.txt'
+'''
+
 # Constantes usadas no código
 REPRESENTACAO_INICIO_FITA = '1'
 REPRESENTACAO_CELULA_VAZIA = '11'
@@ -14,6 +19,9 @@ def inicializa_fitas(fita1):
     # Salva na fita 2 a representação do símbolo de ínicio de fita
     # seguido da representação palavra a ser processada
     fita2 = REPRESENTACAO_INICIO_FITA+'0'+fita1[pos_palavra:]
+    # Se a palavra a ser processada é vazia
+    if len(fita2) == len(REPRESENTACAO_INICIO_FITA+'0'):
+        fita2+=REPRESENTACAO_CELULA_VAZIA
     # Salva na fita 3 o estado inicial da máquina M
     fita3 = ESTADO_INICIAL
     return fita2, fita3
@@ -75,8 +83,9 @@ def simula_maquina_turing_universal(fita1):
             direcao = obtem_simbolo_sob_cabecote(pos_proximo_simbolo, fita1)
             # Salva o estado de entrada como estado atual
             fita3 = novo_estado
-            # Substitui 'simbolo' na fita 2 por 'novo_simbolo'
-            fita2 = fita2.replace(simbolo, novo_simbolo)
+            # Substitui o 'simbolo' lido na fita 2 por 'novo_simbolo'
+            fita2_temp = fita2[cabecote_fita2:]
+            fita2 = fita2[:cabecote_fita2] + fita2_temp.replace(simbolo, novo_simbolo, 1)
             # Se o cabeçote da fita 2 deve se mover para direita
             if direcao == REPRESENTACAO_DIRECAO_DIREITA:
                # Verifica se o símbolo sobre o cabeçote é a última
@@ -126,4 +135,6 @@ arquivo.close()
 # Simula a máquina de turing universal para a representação contida na fita 1
 resultado = simula_maquina_turing_universal(fita1)
 # Imprime o resultado
-print(resultado)
+arquivo = open("saida.txt", "w")
+arquivo.write(resultado)
+arquivo.close()
